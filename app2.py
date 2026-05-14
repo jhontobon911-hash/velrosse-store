@@ -81,64 +81,33 @@ HTML_LAYOUT = """
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
-        .size-table-container { 
-            margin: 50px auto; 
-            max-width: 550px; 
-            background: #fff;
-            padding: 10px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-        .size-table { 
-            width: 100%; 
-            border-collapse: separate; 
-            border-spacing: 0;
-            text-align: center; 
-            font-size: 12px; 
-            border: 1px solid #eee;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .table-header-main { 
-            background: var(--dark-blue) !important; 
-            color: #fff !important; 
-            font-size: 16px; 
-            padding: 15px !important;
-            letter-spacing: 3px;
-            font-weight: 900;
-        }
-        .size-table thead tr:last-child th {
-            background: #f8f9fa;
-            color: var(--black);
-            padding: 12px 5px;
-            text-transform: uppercase;
-            font-weight: 800;
-            border-bottom: 2px solid var(--gold);
-        }
-        .size-table tbody tr:nth-child(even) { background: #fafafa; }
-        .size-table tbody tr:hover { background: var(--light-gold); transition: 0.3s; }
-        .size-table td { 
-            padding: 12px 5px; 
-            border-bottom: 1px solid #eee; 
-            color: #444;
-            font-weight: 600;
-        }
-        .size-table td:first-child { color: var(--pink); font-weight: 900; }
-
-        /* --- NUEVOS ESTILOS PARA RESEÑAS --- */
-        .reviews-section { margin-top: 50px; border-top: 1px solid #eee; padding-top: 40px; }
-        .reviews-title { text-align: center; font-size: 28px; font-weight: 900; margin-bottom: 30px; color: var(--black); }
-        .review-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 15px; padding: 20px; margin-bottom: 20px; display: flex; gap: 15px; align-items: center; }
-        .review-avatar { width: 50px; height: 50px; border-radius: 50%; background: #ddd; object-fit: cover; flex-shrink: 0; }
-        .review-content { flex-grow: 1; }
-        .review-name { font-weight: 800; font-size: 15px; margin: 0; }
-        .review-stars { color: #FFD700; font-size: 12px; margin: 5px 0; }
-        .review-text { font-size: 14px; color: #555; line-height: 1.4; margin: 5px 0; }
-        .review-date { font-size: 11px; color: #999; }
-        .verified-badge { color: #15b358; font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 3px; }
+        /* --- MEJORA DISEÑO DE RESEÑAS --- */
+        .reviews-section { margin-top: 60px; padding: 40px 0; background: #fafafa; border-radius: 20px; }
+        .reviews-title { text-align: center; font-size: 28px; font-weight: 900; margin-bottom: 40px; color: var(--black); }
+        .reviews-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; padding: 0 20px; }
         
-        /* Imagen del producto en la reseña */
-        .review-product-img { width: 80px; height: 110px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid #eee; }
+        .review-card { background: #fff; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #eee; display: flex; flex-direction: column; position: relative; }
+        .review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .review-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); }
+        
+        .review-info { flex-grow: 1; }
+        .review-name { font-weight: 800; font-size: 16px; margin: 0; color: #222; }
+        .verified-badge { color: #15b358; font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+        
+        .review-stars { color: #FFD700; font-size: 14px; margin: 10px 0; }
+        .review-text { font-size: 14px; color: #444; line-height: 1.5; font-style: italic; margin-bottom: 15px; }
+        
+        .review-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; border-top: 1px solid #f5f5f5; pt: 10px; }
+        .review-date { font-size: 11px; color: #999; }
+        .review-product-img { width: 70px; height: 90px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
+
+        /* Estilos de tabla y otros */
+        .size-table-container { margin: 50px auto; max-width: 550px; background: #fff; padding: 10px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .size-table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: center; font-size: 12px; border: 1px solid #eee; border-radius: 8px; overflow: hidden; }
+        .table-header-main { background: var(--dark-blue) !important; color: #fff !important; font-size: 16px; padding: 15px !important; letter-spacing: 3px; font-weight: 900; }
+        .size-table thead tr:last-child th { background: #f8f9fa; color: var(--black); padding: 12px 5px; text-transform: uppercase; font-weight: 800; border-bottom: 2px solid var(--gold); }
+        .size-table td { padding: 12px 5px; border-bottom: 1px solid #eee; color: #444; font-weight: 600; }
+        .size-table td:first-child { color: var(--pink); font-weight: 900; }
 
         .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 40px 0; }
         .feature-card { background: var(--light-gold); padding: 20px; text-align: center; border-radius: 10px; }
@@ -160,10 +129,7 @@ HTML_LAYOUT = """
             .main-grid { grid-template-columns: 1fr; }
             .features-grid { grid-template-columns: repeat(2, 1fr); }
             .footer-grid { grid-template-columns: repeat(2, 1fr); }
-            .brand-name { font-size: 30px; }
-            .size-table-container { max-width: 95%; } 
-            .review-card { flex-direction: row; align-items: flex-start; }
-            .review-product-img { width: 60px; height: 80px; }
+            .reviews-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -267,51 +233,65 @@ HTML_LAYOUT = """
             </table>
         </div>
 
+        <div class="reviews-section">
+            <h3 class="reviews-title">LO QUE DICEN NUESTRAS CLIENTAS</h3>
+            
+            <div class="reviews-container">
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop" class="review-avatar" alt="Cliente">
+                        <div class="review-info">
+                            <p class="review-name">Ana María Restrepo</p>
+                            <div class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador verificado</div>
+                        </div>
+                    </div>
+                    <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text">"¡Me encantó! La tela es súper fresca y de verdad se nota el cambio en la cintura apenas me la pongo. Llegó súper rápido a Medellín."</p>
+                    <div class="review-footer">
+                        <span class="review-date">Publicado hace 2 días</span>
+                        <img src="/imagenes_fajas/faja (2).jpg" class="review-product-img">
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop" class="review-avatar" alt="Cliente">
+                        <div class="review-info">
+                            <p class="review-name">Claudia López</p>
+                            <div class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador verificado</div>
+                        </div>
+                    </div>
+                    <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text">"Compré la promoción de 2 fajas y valió totalmente la pena. La calidad es excelente y el pago contra entrega me dio mucha confianza."</p>
+                    <div class="review-footer">
+                        <span class="review-date">Publicado hace 1 semana</span>
+                        <img src="/imagenes_fajas/faja (4).jpg" class="review-product-img">
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&h=150&fit=crop" class="review-avatar" alt="Cliente">
+                        <div class="review-info">
+                            <p class="review-name">Daniela Vargas</p>
+                            <div class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador verificado</div>
+                        </div>
+                    </div>
+                    <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text">"Muy buena, ayuda mucho con la postura. Yo la uso para ir a la oficina y no se nota absolutamente nada debajo de la ropa."</p>
+                    <div class="review-footer">
+                        <span class="review-date">Publicado hace 2 semanas</span>
+                        <img src="/imagenes_fajas/faja (6).jpg" class="review-product-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="features-grid">
             <div class="feature-card"><i class="fa-solid fa-vest"></i><span>Moldea tu cintura<br>y reduce medidas</span></div>
             <div class="feature-card"><i class="fa-solid fa-person-rays"></i><span>Mejora tu postura<br>y alivia el dolor</span></div>
             <div class="feature-card"><i class="fa-solid fa-calendar-check"></i><span>Uso diario<br>y postparto</span></div>
             <div class="feature-card"><i class="fa-solid fa-gem"></i><span>Material premium<br>transpirable</span></div>
-        </div>
-
-        <div class="reviews-section">
-            <h3 class="reviews-title">OPINIONES DE NUESTRAS CLIENTAS</h3>
-            
-            <div class="review-card">
-                <img src="https://i.pravatar.cc/150?u=ana" class="review-avatar" alt="Ana">
-                <div class="review-content">
-                    <p class="review-name">Ana María Restrepo</p>
-                    <div class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador verificado</div>
-                    <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="review-text">¡Me encantó! La tela es súper fresca y de verdad se nota el cambio en la cintura apenas me la pongo. Llegó súper rápido a Medellín.</p>
-                    <span class="review-date">Hace 2 días</span>
-                </div>
-                <img src="/imagenes_fajas/faja (2).jpg" class="review-product-img">
-            </div>
-
-            <div class="review-card">
-                <img src="https://i.pravatar.cc/150?u=claudia" class="review-avatar" alt="Claudia">
-                <div class="review-content">
-                    <p class="review-name">Claudia López</p>
-                    <div class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador verificado</div>
-                    <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="review-text">Compré la promoción de 2 fajas y valió totalmente la pena. La calidad es excelente y el sistema de pago contra entrega me dio mucha confianza.</p>
-                    <span class="review-date">Hace 1 semana</span>
-                </div>
-                <img src="/imagenes_fajas/faja (4).jpg" class="review-product-img">
-            </div>
-
-            <div class="review-card">
-                <img src="https://i.pravatar.cc/150?u=daniela" class="review-avatar" alt="Daniela">
-                <div class="review-content">
-                    <p class="review-name">Daniela Vargas</p>
-                    <div class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador verificado</div>
-                    <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i></div>
-                    <p class="review-text">Muy buena, ayuda mucho con la postura. Yo la uso para ir a la oficina y no se nota debajo de la ropa.</p>
-                    <span class="review-date">Hace 2 semanas</span>
-                </div>
-                <img src="/imagenes_fajas/faja (6).jpg" class="review-product-img">
-            </div>
         </div>
     </div>
 
