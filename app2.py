@@ -7,17 +7,17 @@ app = Flask(__name__)
 
 # --- CONFIGURACIÓN DE CORREO VELROSSE STORE ---
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_PORT'] = 465  # Cambiado a 465 para mayor compatibilidad con SSL
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True 
 app.config['MAIL_USERNAME'] = 'velrossestore@gmail.com'
-# Contraseña de Aplicación de Google (Verificada)
-app.config['MAIL_PASSWORD'] = 'icdl jprr ztug mdpa' 
+# Nueva Contraseña de Aplicación generada en iPhone
+app.config['MAIL_PASSWORD'] = 'sady uari kkut kaam' 
 app.config['MAIL_DEFAULT_SENDER'] = ('Velrosse Store', 'velrossestore@gmail.com')
 
 mail = Mail(app)
 
-# Función para enviar el correo sin bloquear la página (Corrección de contexto)
+# Función para enviar el correo sin bloquear la página
 def send_async_email(app, msg):
     with app.app_context():
         try:
@@ -367,7 +367,6 @@ def index():
             talla = request.form.get(f'talla_{i}')
             detalles_pedido += f"• Faja #{i}: Talla {talla}, Color {color}\n"
 
-        # Preparamos el mensaje con saltos de línea corregidos
         msg = Message(
             subject=f"NUEVA VENTA ({cantidad} UNID): {nombre}", 
             recipients=['velrossestore@gmail.com']
@@ -390,11 +389,10 @@ def index():
             f"Ciudad:    {ciudad}\n"
             f"Dirección: {direccion}\n\n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            f"         PAGO AL RECIBIR EN CASA         \n"
+            f"         PAGO AL RECIBIR EN CASA          \n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         )
         
-        # Iniciamos el hilo para enviar el correo
         threading.Thread(target=send_async_email, args=(app, msg)).start()
         success = True 
 
