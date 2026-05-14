@@ -6,14 +6,14 @@ import threading
 app = Flask(__name__)
 
 # --- CONFIGURACIÓN DE CORREO VELROSSE STORE ---
-# Usamos el puerto 465 con SSL por ser más estable con Gmail en servidores externos
+# Usamos el puerto 465 con SSL para Gmail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = 'velrossestore@gmail.com'
-# Contraseña de aplicación sin espacios al final
-app.config['MAIL_PASSWORD'] = 'yttp wcij szdj kdny' 
+# Contraseña de aplicación (Limpia sin espacios invisibles)
+app.config['MAIL_PASSWORD'] = 'yttpwcijszdjkdny' 
 app.config['MAIL_DEFAULT_SENDER'] = ('Velrosse Store', 'velrossestore@gmail.com')
 
 mail = Mail(app)
@@ -369,16 +369,15 @@ def index():
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         )
         
-        # Enviar el correo en segundo plano para no demorar la respuesta al cliente
+        # Enviar el correo en segundo plano
         threading.Thread(target=send_async_email, args=(app, msg)).start()
         success = True 
 
     response = make_response(render_template_string(HTML_LAYOUT, success=success))
-    # Cabecera para evitar la pantalla de advertencia de ngrok si lo usas
     response.headers['ngrok-skip-browser-warning'] = '69420'
     return response
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    # Para producción, debug debe ser False. Para pruebas locales, cámbialo a True.
+    # Para producción en Render o similares usar debug=False
     app.run(host='0.0.0.0', port=port, debug=False)
