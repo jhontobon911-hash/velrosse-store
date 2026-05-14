@@ -13,10 +13,8 @@ app.config['MAIL_PASSWORD'] = 'icdl jprr ztug mdpa'
 app.config['MAIL_DEFAULT_SENDER'] = 'velrossestore@gmail.com'
 mail = Mail(app)
 
-# --- RUTA PARA SERVIR IMÁGENES DESDE LA CARPETA STATIC ---
 @app.route('/imagenes_fajas/<path:filename>')
 def serve_fajas(filename):
-    # Esto busca los archivos dentro de la carpeta 'static' de tu GitHub
     return send_from_directory('static', filename)
 
 HTML_LAYOUT = """
@@ -28,7 +26,7 @@ HTML_LAYOUT = """
     <title>Velrosse Store - Faja Moldeadora</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --gold: #b28d42; --pink: #e91e63; --black: #000; --light-gold: #fdf7eb; }
+        :root { --gold: #b28d42; --pink: #e91e63; --black: #000; --light-gold: #fdf7eb; --dark-blue: #1a3a3a; }
         body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; background: #fff; color: #333; }
         
         .top-bar { background: #000; color: #fff; display: grid; grid-template-columns: repeat(3, 1fr); padding: 10px; font-size: 11px; text-align: center; border-bottom: 2px solid var(--gold); }
@@ -61,9 +59,12 @@ HTML_LAYOUT = """
         .discount-tag { background: var(--pink); color: #fff; padding: 5px 10px; border-radius: 5px; font-weight: bold; }
         .payment-info { font-size: 14px; font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; gap: 5px; }
 
-        .sel-title { font-size: 13px; font-weight: 800; text-transform: uppercase; margin: 15px 0 10px; display: block; }
-        .radio-flex { display: flex; gap: 10px; margin-bottom: 15px; }
-        .radio-btn { flex: 1; border: 1px solid #ddd; padding: 12px; border-radius: 8px; text-align: center; cursor: pointer; font-weight: bold; position: relative; }
+        .sel-title { font-size: 13px; font-weight: 800; text-transform: uppercase; margin: 15px 0 10px; display: block; color: #000; }
+        .qty-selector { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--gold); font-weight: bold; margin-bottom: 15px; }
+
+        .item-selection-box { background: #fdfdfd; border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .radio-flex { display: flex; gap: 10px; margin-bottom: 10px; }
+        .radio-btn { flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; font-weight: bold; font-size: 13px; position: relative; }
         .radio-btn input { position: absolute; opacity: 0; }
         .radio-btn:has(input:checked) { border: 2px solid #000; background: #f9f9f9; }
 
@@ -86,6 +87,14 @@ HTML_LAYOUT = """
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
+        /* TABLA DE MEDIDAS CSS */
+        .size-table-container { margin: 40px 0; overflow-x: auto; }
+        .size-table { width: 100%; border-collapse: collapse; min-width: 500px; text-align: center; font-size: 14px; border: 1px solid #ddd; }
+        .size-table thead th { background: var(--dark-blue); color: #f89e9e; padding: 15px; text-transform: uppercase; border: 1px solid #333; }
+        .size-table tr:nth-child(even) { background: #f2f2f2; }
+        .size-table td { padding: 12px; border: 1px solid #ddd; font-weight: bold; color: var(--dark-blue); }
+        .table-header-main { background: var(--dark-blue) !important; color: #f89e9e !important; font-size: 22px; }
+
         .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 40px 0; }
         .feature-card { background: var(--light-gold); padding: 20px; text-align: center; border-radius: 10px; }
         .feature-card i { font-size: 24px; color: var(--gold); margin-bottom: 10px; display: block; }
@@ -107,7 +116,6 @@ HTML_LAYOUT = """
         }
         .modal-content { background: #fff; padding: 40px; border-radius: 20px; text-align: center; max-width: 450px; border: 3px solid var(--gold); }
         .modal-content h2 { color: #28a745; margin-bottom: 15px; }
-        .modal-content p { font-size: 17px; font-weight: bold; }
         .wa-btn { background: #25D366; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; display: inline-block; margin-top: 20px; font-weight: 900; font-size: 20px; }
         
         @media (max-width: 768px) {
@@ -115,6 +123,7 @@ HTML_LAYOUT = """
             .features-grid { grid-template-columns: repeat(2, 1fr); }
             .results-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: repeat(2, 1fr); }
+            .brand-name { font-size: 30px; }
         }
     </style>
 </head>
@@ -174,20 +183,18 @@ HTML_LAYOUT = """
                 <div class="payment-info"><i class="fa-solid fa-house-chimney-check" style="color:var(--gold);"></i> PAGA AL RECIBIR EN LA PUERTA DE TU CASA</div>
 
                 <form method="POST">
-                    <span class="sel-title">1. Selecciona el Color</span>
-                    <div class="radio-flex">
-                        <label class="radio-btn"><input type="radio" name="color" value="Negro" checked> <i class="fa-solid fa-circle" style="color:black;"></i> NEGRO</label>
-                        <label class="radio-btn"><input type="radio" name="color" value="Beige"> <i class="fa-solid fa-circle" style="color:#f5f5dc;"></i> BEIGE</label>
+                    <span class="sel-title">¿Cuántas fajas deseas llevar?</span>
+                    <select name="cantidad" id="qtySelect" class="qty-selector" onchange="generateSelectors()">
+                        <option value="1">Llevar 1 Unidad - $89.900</option>
+                        <option value="2">Llevar 2 Unidades - $179.800</option>
+                        <option value="3">Llevar 3 Unidades - $269.700</option>
+                    </select>
+
+                    <div id="dynamicSelectors">
+                        <!-- Se genera con JS -->
                     </div>
 
-                    <span class="sel-title">2. Selecciona tu Talla</span>
-                    <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:5px;">
-                        {% for t in ['XS', 'S', 'M', 'L', 'XL', '2XL'] %}
-                        <label class="radio-btn" style="padding:8px;"><input type="radio" name="talla" value="{{t}}" required> {{t}}</label>
-                        {% endfor %}
-                    </div>
-
-                    <span class="sel-title">3. Completa tus Datos</span>
+                    <span class="sel-title">Datos de Envío</span>
                     <div class="input-group"><i class="fa-solid fa-user"></i><input type="text" name="nombre" class="field" placeholder="Nombre completo" required></div>
                     <div class="input-group"><i class="fa-solid fa-phone"></i><input type="tel" name="celular" class="field" placeholder="Número de celular" required></div>
                     <div class="input-group"><i class="fa-solid fa-id-card"></i><input type="text" name="cedula" class="field" placeholder="Número de cédula" required></div>
@@ -199,6 +206,29 @@ HTML_LAYOUT = """
             </div>
         </div>
 
+        <!-- TABLA DE MEDIDAS RECREADA -->
+        <div class="size-table-container">
+            <table class="size-table">
+                <thead>
+                    <tr><th colspan="4" class="table-header-main">TABLA DE MEDIDAS</th></tr>
+                    <tr>
+                        <th>Talla en Short</th>
+                        <th>Talla en Jeans</th>
+                        <th>Cintura CM</th>
+                        <th>Cadera CM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>XS</td><td>6</td><td>60-67 CM</td><td>84-90 CM</td></tr>
+                    <tr><td>S</td><td>8</td><td>68-75 CM</td><td>91-98 CM</td></tr>
+                    <tr><td>M</td><td>10</td><td>76-83 CM</td><td>99-106 CM</td></tr>
+                    <tr><td>L</td><td>12</td><td>84-91 CM</td><td>107-114 CM</td></tr>
+                    <tr><td>XL</td><td>14</td><td>92-99 CM</td><td>115-122 CM</td></tr>
+                    <tr><td>2XL</td><td>16-18</td><td>100-107 CM</td><td>123-130 CM</td></tr>
+                </tbody>
+            </table>
+        </div>
+
         <div class="features-grid">
             <div class="feature-card"><i class="fa-solid fa-vest"></i><span>Moldea tu cintura<br>y reduce medidas</span></div>
             <div class="feature-card"><i class="fa-solid fa-person-rays"></i><span>Mejora tu postura<br>y alivia el dolor</span></div>
@@ -208,7 +238,6 @@ HTML_LAYOUT = """
 
         <div class="results-section">
             <h3 style="font-weight:900; font-size:24px;">RESULTADOS REALES</h3>
-            <p>Mujeres reales, resultados reales</p>
             <div class="results-grid">
                 {% set res = [("Camila R.","Desde que uso la faja mi cintura se ve mucho más definida."), ("Daniela M.","Me ayudó muchísimo después del parto, súper cómoda."), ("Valentina G.","La uso todos los días, es ligera y no se nota.")] %}
                 {% for nombre, texto in res %}
@@ -228,14 +257,42 @@ HTML_LAYOUT = """
 
     <div class="footer-black">
         <div class="footer-grid">
-            <div class="footer-item"><i class="fa-solid fa-box-open"></i><strong>ENVÍO GRATIS</strong><br><small>A toda Colombia de 2 a 4 días</small></div>
-            <div class="footer-item"><i class="fa-solid fa-handshake"></i><strong>PAGA AL RECIBIR</strong><br><small>Cancela cuando recibas tu producto</small></div>
-            <div class="footer-item"><i class="fa-solid fa-lock"></i><strong>COMPRA SEGURA</strong><br><small>Tus datos protegidos al 100%</small></div>
-            <div class="footer-item"><i class="fa-solid fa-award"></i><strong>GARANTÍA</strong><br><small>7 días por defectos de fábrica</small></div>
+            <div class="footer-item"><i class="fa-solid fa-box-open"></i><strong>ENVÍO GRATIS</strong><br><small>A toda Colombia</small></div>
+            <div class="footer-item"><i class="fa-solid fa-handshake"></i><strong>PAGA AL RECIBIR</strong><br><small>Cancela al recibir</small></div>
+            <div class="footer-item"><i class="fa-solid fa-lock"></i><strong>COMPRA SEGURA</strong><br><small>Datos protegidos</small></div>
+            <div class="footer-item"><i class="fa-solid fa-award"></i><strong>GARANTÍA</strong><br><small>Por defectos de fábrica</small></div>
         </div>
     </div>
 
     <script>
+        function generateSelectors() {
+            const qty = document.getElementById('qtySelect').value;
+            const container = document.getElementById('dynamicSelectors');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= qty; i++) {
+                container.innerHTML += `
+                    <div class="item-selection-box">
+                        <strong style="display:block; margin-bottom:10px; color:var(--pink);">Faja #${i}</strong>
+                        <span class="sel-title">Color</span>
+                        <div class="radio-flex">
+                            <label class="radio-btn"><input type="radio" name="color_${i}" value="Negro" checked> NEGRO</label>
+                            <label class="radio-btn"><input type="radio" name="color_${i}" value="Beige"> BEIGE</label>
+                        </div>
+                        <span class="sel-title">Talla</span>
+                        <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:5px;">
+                            ${['XS', 'S', 'M', 'L', 'XL', '2XL'].map(t => `
+                                <label class="radio-btn"><input type="radio" name="talla_${i}" value="${t}" required> ${t}</label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Ejecutar al cargar para que aparezca la unidad 1 por defecto
+        window.onload = generateSelectors;
+
         let time = 10055;
         setInterval(() => {
             let h = Math.floor(time / 3600);
@@ -258,20 +315,25 @@ def index():
         cedula = request.form.get('cedula')
         ciudad = request.form.get('ciudad')
         direccion = request.form.get('direccion')
-        color = request.form.get('color')
-        talla = request.form.get('talla')
+        cantidad = int(request.form.get('cantidad', 1))
+
+        # Recopilar detalles de cada faja
+        detalles_pedido = ""
+        for i in range(1, cantidad + 1):
+            color = request.form.get(f'color_{i}')
+            talla = request.form.get(f'talla_{i}')
+            detalles_pedido += f"• Faja #{i}: Talla {talla}, Color {color}\n"
 
         try:
-            msg = Message(subject=f"NUEVO PEDIDO: {nombre}", recipients=['velrossestore@gmail.com'])
+            msg = Message(subject=f"NUEVA VENTA ({cantidad} UNID): {nombre}", recipients=['velrossestore@gmail.com'])
             msg.body = (
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
                 f"       NUEVA VENTA - VELROSSE STORE     \n"
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-                f"📦 DETALLES DEL PRODUCTO:\n"
+                f"📦 RESUMEN DEL PEDIDO:\n"
                 f"----------------------------------------\n"
-                f"Producto:  Faja Moldeadora Velrosse\n"
-                f"Talla:     {talla}\n"
-                f"Color:     {color}\n\n"
+                f"Cantidad Total: {cantidad}\n"
+                f"{detalles_pedido}\n\n"
                 f"👤 DATOS DEL CLIENTE:\n"
                 f"----------------------------------------\n"
                 f"Nombre:    {nombre}\n"
@@ -289,15 +351,12 @@ def index():
             success = True
         except Exception as e:
             print(f"Error enviando correo: {e}")
-            # Activamos success para que el cliente no vea un error técnico
             success = True 
 
     response = make_response(render_template_string(HTML_LAYOUT, success=success))
-    # Encabezado útil si estás probando con túneles como ngrok
     response.headers['ngrok-skip-browser-warning'] = '69420'
     return response
 
 if __name__ == '__main__':
-    # Configuración de puerto para Render
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
