@@ -6,26 +6,26 @@ import threading
 app = Flask(__name__)
 
 # --- CONFIGURACIÓN DE CORREO VELROSSE STORE ---
+# Usamos el puerto 465 con SSL por ser más estable con Gmail en servidores externos
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = 'velrossestore@gmail.com'
-# Nueva Contraseña de Aplicación actualizada
+# Contraseña de aplicación sin espacios al final
 app.config['MAIL_PASSWORD'] = 'yttp wcij szdj kdny' 
 app.config['MAIL_DEFAULT_SENDER'] = ('Velrosse Store', 'velrossestore@gmail.com')
 
 mail = Mail(app)
 
-# Función para enviar el correo sin bloquear la página
+# Función para enviar el correo sin bloquear la carga de la página de éxito
 def send_async_email(app_instance, msg):
-    # Usamos el contexto de la aplicación para que mail.send reconozca la config
     with app_instance.app_context():
         try:
             mail.send(msg)
-            print("✅ Correo enviado exitosamente a velrossestore@gmail.com")
+            print("✅ [SERVER]: Correo enviado exitosamente a velrossestore@gmail.com")
         except Exception as e:
-            print(f"❌ Error enviando correo: {e}")
+            print(f"❌ [SERVER] Error enviando correo: {str(e)}")
 
 @app.route('/imagenes_fajas/<path:filename>')
 def serve_fajas(filename):
@@ -150,12 +150,6 @@ HTML_LAYOUT = """
         .feature-card i { font-size: 24px; color: var(--gold); margin-bottom: 10px; display: block; }
         .feature-card span { font-size: 12px; font-weight: bold; line-height: 1.2; display: block; }
 
-        .results-section { text-align: center; margin-top: 50px; }
-        .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 25px; }
-        .result-item { text-align: left; }
-        .result-img-pair { display: flex; gap: 5px; margin-bottom: 10px; }
-        .result-img-pair img { width: 50%; border-radius: 5px; }
-
         .footer-black { background: #000; color: #fff; padding: 40px 20px; margin-top: 60px; }
         .footer-grid { max-width: 1200px; margin: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; }
         .footer-item i { font-size: 30px; color: var(--gold); margin-bottom: 15px; display: block; }
@@ -171,7 +165,6 @@ HTML_LAYOUT = """
         @media (max-width: 768px) {
             .main-grid { grid-template-columns: 1fr; }
             .features-grid { grid-template-columns: repeat(2, 1fr); }
-            .results-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: repeat(2, 1fr); }
             .brand-name { font-size: 30px; }
             .size-table-container { max-width: 95%; } 
@@ -376,14 +369,16 @@ def index():
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         )
         
-        # Enviar usando el hilo pasando la instancia actual de app
+        # Enviar el correo en segundo plano para no demorar la respuesta al cliente
         threading.Thread(target=send_async_email, args=(app, msg)).start()
         success = True 
 
     response = make_response(render_template_string(HTML_LAYOUT, success=success))
+    # Cabecera para evitar la pantalla de advertencia de ngrok si lo usas
     response.headers['ngrok-skip-browser-warning'] = '69420'
     return response
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
+    # Para producción, debug debe ser False. Para pruebas locales, cámbialo a True.
     app.run(host='0.0.0.0', port=port, debug=False)
