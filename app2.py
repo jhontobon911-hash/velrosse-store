@@ -11,8 +11,8 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'velrossestore@gmail.com'
-# Contraseña de Aplicación de 16 letras (Limpiada de espacios/caracteres ocultos)
-app.config['MAIL_PASSWORD'] = 'sadyuarikkutkaam' 
+# Nueva Contraseña de Aplicación actualizada
+app.config['MAIL_PASSWORD'] = 'yttp wcij szdj kdny' 
 app.config['MAIL_DEFAULT_SENDER'] = ('Velrosse Store', 'velrossestore@gmail.com')
 
 mail = Mail(app)
@@ -372,7 +372,7 @@ def index():
             f"Ciudad:    {ciudad}\n"
             f"Dirección: {direccion}\n\n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            f"         PAGO AL RECIBIR EN CASA           \n"
+            f"         PAGO AL RECIBIR EN CASA            \n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         )
         
