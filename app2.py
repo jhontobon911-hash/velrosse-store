@@ -7,11 +7,11 @@ app = Flask(__name__)
 
 # --- CONFIGURACIÓN DE CORREO VELROSSE STORE ---
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465  # Cambiado a 465 para mayor compatibilidad con SSL
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True 
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'velrossestore@gmail.com'
-# Nueva Contraseña de Aplicación generada en iPhone
+# Contraseña de Aplicación de 16 letras
 app.config['MAIL_PASSWORD'] = 'sady uari kkut kaam' 
 app.config['MAIL_DEFAULT_SENDER'] = ('Velrosse Store', 'velrossestore@gmail.com')
 
@@ -22,9 +22,9 @@ def send_async_email(app, msg):
     with app.app_context():
         try:
             mail.send(msg)
-            print("Correo enviado exitosamente a velrossestore@gmail.com")
+            print("✅ Correo enviado exitosamente a velrossestore@gmail.com")
         except Exception as e:
-            print(f"Error enviando correo: {e}")
+            print(f"❌ Error enviando correo: {e}")
 
 @app.route('/imagenes_fajas/<path:filename>')
 def serve_fajas(filename):
