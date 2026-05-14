@@ -134,7 +134,6 @@ HTML_LAYOUT = """
         .footer-grid { max-width: 1200px; margin: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; }
         .footer-item i { font-size: 30px; color: var(--gold); margin-bottom: 15px; display: block; }
 
-        /* Pantalla de carga para WhatsApp */
         #redirectingModal { 
             display: {% if whatsapp_url %} flex {% else %} none {% endif %}; 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 10000; justify-content: center; align-items: center; flex-direction: column; text-align: center;
