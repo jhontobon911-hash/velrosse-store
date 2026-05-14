@@ -11,15 +11,16 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'velrossestore@gmail.com'
-# Contraseña de Aplicación de 16 letras
-app.config['MAIL_PASSWORD'] = 'sady uari kkut kaam' 
+# Contraseña de Aplicación de 16 letras (Limpiada de espacios/caracteres ocultos)
+app.config['MAIL_PASSWORD'] = 'sadyuarikkutkaam' 
 app.config['MAIL_DEFAULT_SENDER'] = ('Velrosse Store', 'velrossestore@gmail.com')
 
 mail = Mail(app)
 
 # Función para enviar el correo sin bloquear la página
-def send_async_email(app, msg):
-    with app.app_context():
+def send_async_email(app_instance, msg):
+    # Usamos el contexto de la aplicación para que mail.send reconozca la config
+    with app_instance.app_context():
         try:
             mail.send(msg)
             print("✅ Correo enviado exitosamente a velrossestore@gmail.com")
@@ -282,24 +283,6 @@ HTML_LAYOUT = """
             <div class="feature-card"><i class="fa-solid fa-calendar-check"></i><span>Uso diario<br>y postparto</span></div>
             <div class="feature-card"><i class="fa-solid fa-gem"></i><span>Material premium<br>transpirable</span></div>
         </div>
-
-        <div class="results-section">
-            <h3 style="font-weight:900; font-size:24px;">RESULTADOS REALES</h3>
-            <div class="results-grid">
-                {% set res = [("Camila R.","Desde que uso la faja mi cintura se ve mucho más definida."), ("Daniela M.","Me ayudó muchísimo después del parto, súper cómoda."), ("Valentina G.","La uso todos los días, es ligera y no se nota.")] %}
-                {% for nombre, texto in res %}
-                <div class="result-item">
-                    <div class="result-img-pair">
-                        <img src="/imagenes_fajas/faja (1).jpg">
-                        <img src="/imagenes_fajas/faja (2).jpg">
-                    </div>
-                    <div style="color:var(--gold); font-size:12px;">★★★★★</div>
-                    <p style="font-size:13px; font-style:italic; margin:5px 0;">"{{texto}}"</p>
-                    <strong style="font-size:12px;">- {{nombre}}</strong>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
     </div>
 
     <div class="footer-black">
@@ -389,10 +372,11 @@ def index():
             f"Ciudad:    {ciudad}\n"
             f"Dirección: {direccion}\n\n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            f"         PAGO AL RECIBIR EN CASA          \n"
+            f"         PAGO AL RECIBIR EN CASA           \n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         )
         
+        # Enviar usando el hilo pasando la instancia actual de app
         threading.Thread(target=send_async_email, args=(app, msg)).start()
         success = True 
 
