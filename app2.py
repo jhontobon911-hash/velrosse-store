@@ -81,6 +81,18 @@ HTML_LAYOUT = """
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
+        /* --- ESTILOS DE RESEÑAS --- */
+        .reviews-section { margin-top: 60px; border-top: 1px solid #eee; padding-top: 40px; }
+        .reviews-title { text-align: center; font-size: 28px; font-weight: 900; margin-bottom: 30px; }
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .review-card { background: #f9f9f9; padding: 20px; border-radius: 15px; border: 1px solid #eee; }
+        .review-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .review-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #ddd; }
+        .review-stars { color: #ffc107; font-size: 14px; }
+        .review-name { font-weight: bold; font-size: 15px; margin: 0; }
+        .review-verified { color: #25D366; font-size: 12px; font-weight: bold; }
+        .review-text { font-size: 14px; color: #555; line-height: 1.5; font-style: italic; }
+
         .size-table-container { 
             margin: 50px auto; 
             max-width: 550px; 
@@ -256,7 +268,46 @@ HTML_LAYOUT = """
             <div class="feature-card"><i class="fa-solid fa-calendar-check"></i><span>Uso diario<br>y postparto</span></div>
             <div class="feature-card"><i class="fa-solid fa-gem"></i><span>Material premium<br>transpirable</span></div>
         </div>
-    </div>
+
+        <div class="reviews-section">
+            <h3 class="reviews-title">LO QUE DICEN NUESTRAS CLIENTAS</h3>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://i.pravatar.cc/100?u=1" class="review-avatar">
+                        <div>
+                            <p class="review-name">Claudia Martínez</p>
+                            <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                            <span class="review-verified"><i class="fas fa-check-circle"></i> Compra Verificada</span>
+                        </div>
+                    </div>
+                    <p class="review-text">"La mejor inversión que he hecho. Me ayuda mucho con la postura en la oficina y se nota la diferencia apenas te la pones. ¡Excelente servicio!"</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://i.pravatar.cc/100?u=2" class="review-avatar">
+                        <div>
+                            <p class="review-name">Paola Restrepo</p>
+                            <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                            <span class="review-verified"><i class="fas fa-check-circle"></i> Compra Verificada</span>
+                        </div>
+                    </div>
+                    <p class="review-text">"Tenía miedo por la talla pero la tabla de medidas es exacta. Pedí la M y me quedó perfecta. El material es muy suave."</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://i.pravatar.cc/100?u=3" class="review-avatar">
+                        <div>
+                            <p class="review-name">Yuliana Giraldo</p>
+                            <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                            <span class="review-verified"><i class="fas fa-check-circle"></i> Compra Verificada</span>
+                        </div>
+                    </div>
+                    <p class="review-text">"Pedí el combo de 2 unidades para tener repuesto y llegaron súper rápido. Muy contenta con el resultado."</p>
+                </div>
+            </div>
+        </div>
+        </div>
 
     <div class="footer-black">
         <div class="footer-grid">
@@ -323,7 +374,6 @@ def index():
             talla = request.form.get(f'talla_{i}')
             detalles_pedido += f"• Faja {i}: Talla {talla}, Color {color}\\n"
 
-        # Mensaje formateado para WhatsApp
         texto = (
             f"👑 *NUEVO PEDIDO - VELROSSE* 👑\\n\\n"
             f"👤 *Cliente:* {nombre}\\n"
