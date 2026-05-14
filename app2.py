@@ -87,13 +87,39 @@ HTML_LAYOUT = """
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
-        /* TABLA DE MEDIDAS CSS */
-        .size-table-container { margin: 40px 0; overflow-x: auto; }
-        .size-table { width: 100%; border-collapse: collapse; min-width: 500px; text-align: center; font-size: 14px; border: 1px solid #ddd; }
-        .size-table thead th { background: var(--dark-blue); color: #f89e9e; padding: 15px; text-transform: uppercase; border: 1px solid #333; }
-        .size-table tr:nth-child(even) { background: #f2f2f2; }
-        .size-table td { padding: 12px; border: 1px solid #ddd; font-weight: bold; color: var(--dark-blue); }
-        .table-header-main { background: var(--dark-blue) !important; color: #f89e9e !important; font-size: 22px; }
+        /* TABLA DE MEDIDAS ORGANIZADA (50% tamaño y colores de marca) */
+        .size-table-container { 
+            margin: 40px auto; 
+            max-width: 600px; /* Limitado a la mitad aproximadamente del contenedor principal */
+            overflow-x: auto; 
+        }
+        .size-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            text-align: center; 
+            font-size: 13px; 
+            border: 2px solid var(--gold); 
+        }
+        .size-table thead th { 
+            background: var(--black); 
+            color: #fff; 
+            padding: 12px; 
+            text-transform: uppercase; 
+            border: 1px solid var(--gold); 
+        }
+        .size-table tr:nth-child(even) { background: var(--light-gold); }
+        .size-table td { 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            font-weight: bold; 
+            color: #333; 
+        }
+        .table-header-main { 
+            background: var(--gold) !important; 
+            color: #fff !important; 
+            font-size: 18px; 
+            letter-spacing: 2px;
+        }
 
         .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 40px 0; }
         .feature-card { background: var(--light-gold); padding: 20px; text-align: center; border-radius: 10px; }
@@ -124,6 +150,7 @@ HTML_LAYOUT = """
             .results-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: repeat(2, 1fr); }
             .brand-name { font-size: 30px; }
+            .size-table-container { max-width: 95%; } /* En móvil se expande un poco más para legibilidad */
         }
     </style>
 </head>
@@ -206,16 +233,16 @@ HTML_LAYOUT = """
             </div>
         </div>
 
-        <!-- TABLA DE MEDIDAS RECREADA -->
+        <!-- TABLA DE MEDIDAS AJUSTADA -->
         <div class="size-table-container">
             <table class="size-table">
                 <thead>
                     <tr><th colspan="4" class="table-header-main">TABLA DE MEDIDAS</th></tr>
                     <tr>
-                        <th>Talla en Short</th>
-                        <th>Talla en Jeans</th>
-                        <th>Cintura CM</th>
-                        <th>Cadera CM</th>
+                        <th>Short</th>
+                        <th>Jeans</th>
+                        <th>Cintura</th>
+                        <th>Cadera</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -290,7 +317,6 @@ HTML_LAYOUT = """
             }
         }
         
-        // Ejecutar al cargar para que aparezca la unidad 1 por defecto
         window.onload = generateSelectors;
 
         let time = 10055;
@@ -317,7 +343,6 @@ def index():
         direccion = request.form.get('direccion')
         cantidad = int(request.form.get('cantidad', 1))
 
-        # Recopilar detalles de cada faja
         detalles_pedido = ""
         for i in range(1, cantidad + 1):
             color = request.form.get(f'color_{i}')
@@ -328,7 +353,7 @@ def index():
             msg = Message(subject=f"NUEVA VENTA ({cantidad} UNID): {nombre}", recipients=['velrossestore@gmail.com'])
             msg.body = (
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                f"       NUEVA VENTA - VELROSSE STORE     \n"
+                f"        NUEVA VENTA - VELROSSE STORE     \n"
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
                 f"📦 RESUMEN DEL PEDIDO:\n"
                 f"----------------------------------------\n"
@@ -344,7 +369,7 @@ def index():
                 f"Ciudad:    {ciudad}\n"
                 f"Dirección: {direccion}\n\n"
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                f"        PAGO AL RECIBIR EN CASA         \n"
+                f"         PAGO AL RECIBIR EN CASA         \n"
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
             mail.send(msg)
