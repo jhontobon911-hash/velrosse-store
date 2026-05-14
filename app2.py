@@ -87,38 +87,53 @@ HTML_LAYOUT = """
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
-        /* TABLA DE MEDIDAS ORGANIZADA (50% tamaño y colores de marca) */
+        /* --- TABLA DE MEDIDAS MEJORADA --- */
         .size-table-container { 
-            margin: 40px auto; 
-            max-width: 600px; /* Limitado a la mitad aproximadamente del contenedor principal */
-            overflow-x: auto; 
+            margin: 50px auto; 
+            max-width: 550px; /* Tamaño reducido al 50% aproximadamente */
+            background: #fff;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
         }
         .size-table { 
             width: 100%; 
-            border-collapse: collapse; 
+            border-collapse: separate; 
+            border-spacing: 0;
             text-align: center; 
-            font-size: 13px; 
-            border: 2px solid var(--gold); 
-        }
-        .size-table thead th { 
-            background: var(--black); 
-            color: #fff; 
-            padding: 12px; 
-            text-transform: uppercase; 
-            border: 1px solid var(--gold); 
-        }
-        .size-table tr:nth-child(even) { background: var(--light-gold); }
-        .size-table td { 
-            padding: 10px; 
-            border: 1px solid #ddd; 
-            font-weight: bold; 
-            color: #333; 
+            font-size: 12px; 
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
         }
         .table-header-main { 
-            background: var(--gold) !important; 
+            background: var(--dark-blue) !important; 
             color: #fff !important; 
-            font-size: 18px; 
-            letter-spacing: 2px;
+            font-size: 16px; 
+            padding: 15px !important;
+            letter-spacing: 3px;
+            font-weight: 900;
+        }
+        .size-table thead tr:last-child th {
+            background: #f8f9fa;
+            color: var(--black);
+            padding: 12px 5px;
+            text-transform: uppercase;
+            font-weight: 800;
+            border-bottom: 2px solid var(--gold);
+        }
+        .size-table tbody tr:nth-child(even) { background: #fafafa; }
+        .size-table tbody tr:hover { background: var(--light-gold); transition: 0.3s; }
+        .size-table td { 
+            padding: 12px 5px; 
+            border-bottom: 1px solid #eee; 
+            color: #444;
+            font-weight: 600;
+        }
+        /* Resaltado de la columna de tallas principal */
+        .size-table td:first-child {
+            color: var(--pink);
+            font-weight: 900;
         }
 
         .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 40px 0; }
@@ -150,7 +165,7 @@ HTML_LAYOUT = """
             .results-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: repeat(2, 1fr); }
             .brand-name { font-size: 30px; }
-            .size-table-container { max-width: 95%; } /* En móvil se expande un poco más para legibilidad */
+            .size-table-container { max-width: 95%; } 
         }
     </style>
 </head>
@@ -233,13 +248,13 @@ HTML_LAYOUT = """
             </div>
         </div>
 
-        <!-- TABLA DE MEDIDAS AJUSTADA -->
+        <!-- TABLA DE MEDIDAS REDISEÑADA -->
         <div class="size-table-container">
             <table class="size-table">
                 <thead>
                     <tr><th colspan="4" class="table-header-main">TABLA DE MEDIDAS</th></tr>
                     <tr>
-                        <th>Short</th>
+                        <th>Talla</th>
                         <th>Jeans</th>
                         <th>Cintura</th>
                         <th>Cadera</th>
