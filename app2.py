@@ -128,7 +128,7 @@ HTML_LAYOUT = """
         /* --- NUEVOS ESTILOS PARA RESEÑAS --- */
         .reviews-section { margin-top: 50px; border-top: 1px solid #eee; padding-top: 40px; }
         .reviews-title { text-align: center; font-size: 28px; font-weight: 900; margin-bottom: 30px; color: var(--black); }
-        .review-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 15px; padding: 20px; margin-bottom: 20px; display: flex; gap: 15px; align-items: flex-start; }
+        .review-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 15px; padding: 20px; margin-bottom: 20px; display: flex; gap: 15px; align-items: center; }
         .review-avatar { width: 50px; height: 50px; border-radius: 50%; background: #ddd; object-fit: cover; flex-shrink: 0; }
         .review-content { flex-grow: 1; }
         .review-name { font-weight: 800; font-size: 15px; margin: 0; }
@@ -136,6 +136,9 @@ HTML_LAYOUT = """
         .review-text { font-size: 14px; color: #555; line-height: 1.4; margin: 5px 0; }
         .review-date { font-size: 11px; color: #999; }
         .verified-badge { color: #15b358; font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 3px; }
+        
+        /* Imagen del producto en la reseña */
+        .review-product-img { width: 80px; height: 110px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid #eee; }
 
         .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 40px 0; }
         .feature-card { background: var(--light-gold); padding: 20px; text-align: center; border-radius: 10px; }
@@ -159,7 +162,8 @@ HTML_LAYOUT = """
             .footer-grid { grid-template-columns: repeat(2, 1fr); }
             .brand-name { font-size: 30px; }
             .size-table-container { max-width: 95%; } 
-            .review-card { flex-direction: column; }
+            .review-card { flex-direction: row; align-items: flex-start; }
+            .review-product-img { width: 60px; height: 80px; }
         }
     </style>
 </head>
@@ -282,6 +286,7 @@ HTML_LAYOUT = """
                     <p class="review-text">¡Me encantó! La tela es súper fresca y de verdad se nota el cambio en la cintura apenas me la pongo. Llegó súper rápido a Medellín.</p>
                     <span class="review-date">Hace 2 días</span>
                 </div>
+                <img src="/imagenes_fajas/faja (2).jpg" class="review-product-img">
             </div>
 
             <div class="review-card">
@@ -293,6 +298,7 @@ HTML_LAYOUT = """
                     <p class="review-text">Compré la promoción de 2 fajas y valió totalmente la pena. La calidad es excelente y el sistema de pago contra entrega me dio mucha confianza.</p>
                     <span class="review-date">Hace 1 semana</span>
                 </div>
+                <img src="/imagenes_fajas/faja (4).jpg" class="review-product-img">
             </div>
 
             <div class="review-card">
@@ -304,6 +310,7 @@ HTML_LAYOUT = """
                     <p class="review-text">Muy buena, ayuda mucho con la postura. Yo la uso para ir a la oficina y no se nota debajo de la ropa.</p>
                     <span class="review-date">Hace 2 semanas</span>
                 </div>
+                <img src="/imagenes_fajas/faja (6).jpg" class="review-product-img">
             </div>
         </div>
     </div>
@@ -373,7 +380,6 @@ def index():
             talla = request.form.get(f'talla_{i}')
             detalles_pedido += f"• Faja {i}: Talla {talla}, Color {color}\\n"
 
-        # Mensaje formateado para WhatsApp
         texto = (
             f"👑 *NUEVO PEDIDO - VELROSSE* 👑\\n\\n"
             f"👤 *Cliente:* {nombre}\\n"
