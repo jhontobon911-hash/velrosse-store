@@ -222,7 +222,7 @@ HTML_LAYOUT = """
                     <div class="input-group"><i class="fa-solid fa-map-pin"></i><input type="text" name="direccion" class="field" placeholder="Dirección de entrega" required></div>
 
                     <button type="submit" class="btn-submit">
-                        <i class="fa-brands fa-whatsapp"></i> COMPRAR POR WHATSAPP
+                        <i class="fa-brands fa-whatsapp"></i> Realiza tu Compra ¡Pide ahora, paga al recibir!
                     </button>
                 </form>
             </div>
