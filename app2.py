@@ -1,6 +1,7 @@
 from flask import Flask, render_template_string, request, send_from_directory, make_response
 from flask_mail import Mail, Message
 import os
+import threading # Necesario para enviar correos en segundo plano y no congelar la web
 
 app = Flask(__name__)
 
@@ -12,6 +13,14 @@ app.config['MAIL_USERNAME'] = 'velrossestore@gmail.com'
 app.config['MAIL_PASSWORD'] = 'icdl jprr ztug mdpa' 
 app.config['MAIL_DEFAULT_SENDER'] = 'velrossestore@gmail.com'
 mail = Mail(app)
+
+# Función para enviar el correo sin bloquear la página
+def send_async_email(app, msg):
+    with app.app_context():
+        try:
+            mail.send(msg)
+        except Exception as e:
+            print(f"Error enviando correo: {e}")
 
 @app.route('/imagenes_fajas/<path:filename>')
 def serve_fajas(filename):
@@ -90,7 +99,7 @@ HTML_LAYOUT = """
         /* --- TABLA DE MEDIDAS MEJORADA --- */
         .size-table-container { 
             margin: 50px auto; 
-            max-width: 550px; /* Tamaño reducido al 50% aproximadamente */
+            max-width: 550px; 
             background: #fff;
             padding: 10px;
             border-radius: 12px;
@@ -130,11 +139,7 @@ HTML_LAYOUT = """
             color: #444;
             font-weight: 600;
         }
-        /* Resaltado de la columna de tallas principal */
-        .size-table td:first-child {
-            color: var(--pink);
-            font-weight: 900;
-        }
+        .size-table td:first-child { color: var(--pink); font-weight: 900; }
 
         .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 40px 0; }
         .feature-card { background: var(--light-gold); padding: 20px; text-align: center; border-radius: 10px; }
@@ -233,7 +238,7 @@ HTML_LAYOUT = """
                     </select>
 
                     <div id="dynamicSelectors">
-                        <!-- Se genera con JS -->
+                        <!-- JS generará esto -->
                     </div>
 
                     <span class="sel-title">Datos de Envío</span>
@@ -248,7 +253,6 @@ HTML_LAYOUT = """
             </div>
         </div>
 
-        <!-- TABLA DE MEDIDAS REDISEÑADA -->
         <div class="size-table-container">
             <table class="size-table">
                 <thead>
@@ -311,7 +315,6 @@ HTML_LAYOUT = """
             const qty = document.getElementById('qtySelect').value;
             const container = document.getElementById('dynamicSelectors');
             container.innerHTML = '';
-
             for (let i = 1; i <= qty; i++) {
                 container.innerHTML += `
                     <div class="item-selection-box">
@@ -331,7 +334,6 @@ HTML_LAYOUT = """
                 `;
             }
         }
-        
         window.onload = generateSelectors;
 
         let time = 10055;
@@ -364,39 +366,39 @@ def index():
             talla = request.form.get(f'talla_{i}')
             detalles_pedido += f"• Faja #{i}: Talla {talla}, Color {color}\n"
 
-        try:
-            msg = Message(subject=f"NUEVA VENTA ({cantidad} UNID): {nombre}", recipients=['velrossestore@gmail.com'])
-            msg.body = (
-                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                f"        NUEVA VENTA - VELROSSE STORE     \n"
-                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-                f"📦 RESUMEN DEL PEDIDO:\n"
-                f"----------------------------------------\n"
-                f"Cantidad Total: {cantidad}\n"
-                f"{detalles_pedido}\n\n"
-                f"👤 DATOS DEL CLIENTE:\n"
-                f"----------------------------------------\n"
-                f"Nombre:    {nombre}\n"
-                f"Celular:   {celular}\n"
-                f"Cédula:    {cedula}\n\n"
-                f"📍 DIRECCIÓN DE ENVÍO:\n"
-                f"----------------------------------------\n"
-                f"Ciudad:    {ciudad}\n"
-                f"Dirección: {direccion}\n\n"
-                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                f"         PAGO AL RECIBIR EN CASA         \n"
-                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            )
-            mail.send(msg)
-            success = True
-        except Exception as e:
-            print(f"Error enviando correo: {e}")
-            success = True 
+        # Preparamos el mensaje
+        msg = Message(subject=f"NUEVA VENTA ({cantidad} UNID): {nombre}", recipients=['velrossestore@gmail.com'])
+        msg.body = (
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"        NUEVA VENTA - VELROSSE STORE     \n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"📦 RESUMEN DEL PEDIDO:\n"
+            f"----------------------------------------\n"
+            f"Cantidad Total: {cantidad}\n"
+            f"{detalles_pedido}\n\n"
+            f"👤 DATOS DEL CLIENTE:\n"
+            f"----------------------------------------\n"
+            f"Nombre:    {nombre}\n"
+            f"Celular:   {celular}\n"
+            f"Cédula:    {cedula}\n\n"
+            f"📍 DIRECCIÓN DE ENVÍO:\n"
+            f"----------------------------------------\n"
+            f"Ciudad:    {ciudad}\n"
+            f"Dirección: {direccion}\n\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"         PAGO AL RECIBIR EN CASA         \n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        )
+        
+        # AQUÍ LA CORRECCIÓN: Enviamos en un "hilo" aparte para que la web no se congele
+        threading.Thread(target=send_async_email, args=(app, msg)).start()
+        success = True 
 
+    # Respondemos de inmediato sin esperar al correo
     response = make_response(render_template_string(HTML_LAYOUT, success=success))
     response.headers['ngrok-skip-browser-warning'] = '69420'
     return response
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=False) # Debug False para producción estable
