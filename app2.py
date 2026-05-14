@@ -1,7 +1,7 @@
 from flask import Flask, render_template_string, request, send_from_directory, make_response
 from flask_mail import Mail, Message
 import os
-import threading # Necesario para enviar correos en segundo plano y no congelar la web
+import threading
 
 app = Flask(__name__)
 
@@ -9,9 +9,12 @@ app = Flask(__name__)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'velrossestore@gmail.com' 
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'velrossestore@gmail.com'
+# Contraseña de Aplicación de Google verificada
 app.config['MAIL_PASSWORD'] = 'icdl jprr ztug mdpa' 
-app.config['MAIL_DEFAULT_SENDER'] = 'velrossestore@gmail.com'
+app.config['MAIL_DEFAULT_SENDER'] = ('Velrosse Store', 'velrossestore@gmail.com')
+
 mail = Mail(app)
 
 # Función para enviar el correo sin bloquear la página
@@ -19,6 +22,7 @@ def send_async_email(app, msg):
     with app.app_context():
         try:
             mail.send(msg)
+            print("Correo enviado exitosamente")
         except Exception as e:
             print(f"Error enviando correo: {e}")
 
@@ -96,7 +100,6 @@ HTML_LAYOUT = """
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
-        /* --- TABLA DE MEDIDAS MEJORADA --- */
         .size-table-container { 
             margin: 50px auto; 
             max-width: 550px; 
@@ -237,9 +240,7 @@ HTML_LAYOUT = """
                         <option value="3">Llevar 3 Unidades - $269.700</option>
                     </select>
 
-                    <div id="dynamicSelectors">
-                        <!-- JS generará esto -->
-                    </div>
+                    <div id="dynamicSelectors"></div>
 
                     <span class="sel-title">Datos de Envío</span>
                     <div class="input-group"><i class="fa-solid fa-user"></i><input type="text" name="nombre" class="field" placeholder="Nombre completo" required></div>
@@ -367,7 +368,10 @@ def index():
             detalles_pedido += f"• Faja #{i}: Talla {talla}, Color {color}\n"
 
         # Preparamos el mensaje
-        msg = Message(subject=f"NUEVA VENTA ({cantidad} UNID): {nombre}", recipients=['velrossestore@gmail.com'])
+        msg = Message(
+            subject=f"NUEVA VENTA ({cantidad} UNID): {nombre}", 
+            recipients=['velrossestore@gmail.com']
+        )
         msg.body = (
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             f"        NUEVA VENTA - VELROSSE STORE     \n"
@@ -390,15 +394,14 @@ def index():
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         )
         
-        # AQUÍ LA CORRECCIÓN: Enviamos en un "hilo" aparte para que la web no se congele
+        # Iniciamos el hilo para enviar el correo
         threading.Thread(target=send_async_email, args=(app, msg)).start()
         success = True 
 
-    # Respondemos de inmediato sin esperar al correo
     response = make_response(render_template_string(HTML_LAYOUT, success=success))
     response.headers['ngrok-skip-browser-warning'] = '69420'
     return response
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=False) # Debug False para producción estable
+    app.run(host='0.0.0.0', port=port, debug=False)
