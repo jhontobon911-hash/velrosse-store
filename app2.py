@@ -81,18 +81,6 @@ HTML_LAYOUT = """
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
-        /* --- ESTILOS DE RESEÑAS --- */
-        .reviews-section { margin-top: 60px; border-top: 1px solid #eee; padding-top: 40px; }
-        .reviews-title { text-align: center; font-size: 28px; font-weight: 900; margin-bottom: 30px; }
-        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .review-card { background: #f9f9f9; padding: 20px; border-radius: 15px; border: 1px solid #eee; }
-        .review-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .review-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #ddd; }
-        .review-stars { color: #ffc107; font-size: 14px; }
-        .review-name { font-weight: bold; font-size: 15px; margin: 0; }
-        .review-verified { color: #25D366; font-size: 12px; font-weight: bold; }
-        .review-text { font-size: 14px; color: #555; line-height: 1.5; font-style: italic; }
-
         .size-table-container { 
             margin: 50px auto; 
             max-width: 550px; 
@@ -137,6 +125,18 @@ HTML_LAYOUT = """
         }
         .size-table td:first-child { color: var(--pink); font-weight: 900; }
 
+        /* --- NUEVOS ESTILOS PARA RESEÑAS --- */
+        .reviews-section { margin-top: 50px; border-top: 1px solid #eee; padding-top: 40px; }
+        .reviews-title { text-align: center; font-size: 28px; font-weight: 900; margin-bottom: 30px; color: var(--black); }
+        .review-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 15px; padding: 20px; margin-bottom: 20px; display: flex; gap: 15px; align-items: flex-start; }
+        .review-avatar { width: 50px; height: 50px; border-radius: 50%; background: #ddd; object-fit: cover; flex-shrink: 0; }
+        .review-content { flex-grow: 1; }
+        .review-name { font-weight: 800; font-size: 15px; margin: 0; }
+        .review-stars { color: #FFD700; font-size: 12px; margin: 5px 0; }
+        .review-text { font-size: 14px; color: #555; line-height: 1.4; margin: 5px 0; }
+        .review-date { font-size: 11px; color: #999; }
+        .verified-badge { color: #15b358; font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 3px; }
+
         .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 40px 0; }
         .feature-card { background: var(--light-gold); padding: 20px; text-align: center; border-radius: 10px; }
         .feature-card i { font-size: 24px; color: var(--gold); margin-bottom: 10px; display: block; }
@@ -159,6 +159,7 @@ HTML_LAYOUT = """
             .footer-grid { grid-template-columns: repeat(2, 1fr); }
             .brand-name { font-size: 30px; }
             .size-table-container { max-width: 95%; } 
+            .review-card { flex-direction: column; }
         }
     </style>
 </head>
@@ -270,44 +271,42 @@ HTML_LAYOUT = """
         </div>
 
         <div class="reviews-section">
-            <h3 class="reviews-title">LO QUE DICEN NUESTRAS CLIENTAS</h3>
-            <div class="reviews-grid">
-                <div class="review-card">
-                    <div class="review-header">
-                        <img src="https://i.pravatar.cc/100?u=1" class="review-avatar">
-                        <div>
-                            <p class="review-name">Claudia Martínez</p>
-                            <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                            <span class="review-verified"><i class="fas fa-check-circle"></i> Compra Verificada</span>
-                        </div>
-                    </div>
-                    <p class="review-text">"La mejor inversión que he hecho. Me ayuda mucho con la postura en la oficina y se nota la diferencia apenas te la pones. ¡Excelente servicio!"</p>
+            <h3 class="reviews-title">OPINIONES DE NUESTRAS CLIENTAS</h3>
+            
+            <div class="review-card">
+                <img src="https://i.pravatar.cc/150?u=ana" class="review-avatar" alt="Ana">
+                <div class="review-content">
+                    <p class="review-name">Ana María Restrepo</p>
+                    <div class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador verificado</div>
+                    <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text">¡Me encantó! La tela es súper fresca y de verdad se nota el cambio en la cintura apenas me la pongo. Llegó súper rápido a Medellín.</p>
+                    <span class="review-date">Hace 2 días</span>
                 </div>
-                <div class="review-card">
-                    <div class="review-header">
-                        <img src="https://i.pravatar.cc/100?u=2" class="review-avatar">
-                        <div>
-                            <p class="review-name">Paola Restrepo</p>
-                            <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                            <span class="review-verified"><i class="fas fa-check-circle"></i> Compra Verificada</span>
-                        </div>
-                    </div>
-                    <p class="review-text">"Tenía miedo por la talla pero la tabla de medidas es exacta. Pedí la M y me quedó perfecta. El material es muy suave."</p>
+            </div>
+
+            <div class="review-card">
+                <img src="https://i.pravatar.cc/150?u=claudia" class="review-avatar" alt="Claudia">
+                <div class="review-content">
+                    <p class="review-name">Claudia López</p>
+                    <div class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador verificado</div>
+                    <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text">Compré la promoción de 2 fajas y valió totalmente la pena. La calidad es excelente y el sistema de pago contra entrega me dio mucha confianza.</p>
+                    <span class="review-date">Hace 1 semana</span>
                 </div>
-                <div class="review-card">
-                    <div class="review-header">
-                        <img src="https://i.pravatar.cc/100?u=3" class="review-avatar">
-                        <div>
-                            <p class="review-name">Yuliana Giraldo</p>
-                            <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                            <span class="review-verified"><i class="fas fa-check-circle"></i> Compra Verificada</span>
-                        </div>
-                    </div>
-                    <p class="review-text">"Pedí el combo de 2 unidades para tener repuesto y llegaron súper rápido. Muy contenta con el resultado."</p>
+            </div>
+
+            <div class="review-card">
+                <img src="https://i.pravatar.cc/150?u=daniela" class="review-avatar" alt="Daniela">
+                <div class="review-content">
+                    <p class="review-name">Daniela Vargas</p>
+                    <div class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador verificado</div>
+                    <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i></div>
+                    <p class="review-text">Muy buena, ayuda mucho con la postura. Yo la uso para ir a la oficina y no se nota debajo de la ropa.</p>
+                    <span class="review-date">Hace 2 semanas</span>
                 </div>
             </div>
         </div>
-        </div>
+    </div>
 
     <div class="footer-black">
         <div class="footer-grid">
@@ -374,6 +373,7 @@ def index():
             talla = request.form.get(f'talla_{i}')
             detalles_pedido += f"• Faja {i}: Talla {talla}, Color {color}\\n"
 
+        # Mensaje formateado para WhatsApp
         texto = (
             f"👑 *NUEVO PEDIDO - VELROSSE* 👑\\n\\n"
             f"👤 *Cliente:* {nombre}\\n"
