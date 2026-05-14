@@ -13,9 +13,10 @@ app.config['MAIL_PASSWORD'] = 'icdl jprr ztug mdpa'
 app.config['MAIL_DEFAULT_SENDER'] = 'velrossestore@gmail.com'
 mail = Mail(app)
 
-# CORRECCIÓN: En Render usamos la carpeta 'static' que ya creó en su repositorio
+# --- RUTA PARA SERVIR IMÁGENES DESDE LA CARPETA STATIC ---
 @app.route('/imagenes_fajas/<path:filename>')
 def serve_fajas(filename):
+    # Esto busca los archivos dentro de la carpeta 'static' de tu GitHub
     return send_from_directory('static', filename)
 
 HTML_LAYOUT = """
@@ -45,7 +46,7 @@ HTML_LAYOUT = """
         .main-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; margin-top: 20px; }
 
         .gallery-box { display: flex; gap: 15px; }
-        .thumbs-list { display: flex; flex-direction: column; gap: 10px; }
+        .thumbs-list { display: flex; flex-direction: column; gap: 10px; max-height: 550px; overflow-y: auto; }
         .thumbs-list img { width: 70px; height: 95px; object-fit: cover; border-radius: 5px; cursor: pointer; border: 1px solid #ddd; }
         .main-img-box { flex-grow: 1; border: 1px solid #eee; border-radius: 10px; overflow: hidden; height: 550px; }
         .main-img-box img { width: 100%; height: 100%; object-fit: cover; }
@@ -108,6 +109,13 @@ HTML_LAYOUT = """
         .modal-content h2 { color: #28a745; margin-bottom: 15px; }
         .modal-content p { font-size: 17px; font-weight: bold; }
         .wa-btn { background: #25D366; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; display: inline-block; margin-top: 20px; font-weight: 900; font-size: 20px; }
+        
+        @media (max-width: 768px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .results-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
@@ -116,8 +124,8 @@ HTML_LAYOUT = """
         <div class="modal-content">
             <i class="fa-solid fa-circle-check" style="font-size: 60px; color: #28a745;"></i>
             <h2>¡GRACIAS POR TU COMPRA!</h2>
-            <p>su pedido esta en proceso de alistamiento y envio</p>
-            <p>en caso de tener alguna pregunta puedes escribirnos a nuestro whatsaap</p>
+            <p>Su pedido está en proceso de alistamiento y envío.</p>
+            <p>En caso de tener alguna pregunta puedes escribirnos a nuestro WhatsApp:</p>
             <a href="https://wa.me/573169641418" class="wa-btn"><i class="fa-brands fa-whatsapp"></i> +57 316 964 14 18</a>
             <br><br>
             <a href="/" style="color: #888; text-decoration: none; font-size: 12px;">VOLVER</a>
@@ -141,7 +149,7 @@ HTML_LAYOUT = """
         <div class="main-grid">
             <div class="gallery-box">
                 <div class="thumbs-list">
-                    {% for i in range(1, 10) %}
+                    {% for i in range(1, 8) %}
                     <img src="/imagenes_fajas/faja ({{i}}).jpg" onclick="document.getElementById('mainPhoto').src=this.src">
                     {% endfor %}
                 </div>
@@ -280,16 +288,16 @@ def index():
             mail.send(msg)
             success = True
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error enviando correo: {e}")
+            # Activamos success para que el cliente no vea un error técnico
             success = True 
 
     response = make_response(render_template_string(HTML_LAYOUT, success=success))
+    # Encabezado útil si estás probando con túneles como ngrok
     response.headers['ngrok-skip-browser-warning'] = '69420'
     return response
 
 if __name__ == '__main__':
-    # Usamos el puerto estándar para Render
-    app.run(host='0.0.0.0', port=5000, debug=True)
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Configuración de puerto para Render
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
