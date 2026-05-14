@@ -1,5 +1,6 @@
 from flask import Flask, render_template_string, request, send_from_directory, make_response
 from flask_mail import Mail, Message
+import os
 
 app = Flask(__name__)
 
@@ -12,12 +13,10 @@ app.config['MAIL_PASSWORD'] = 'icdl jprr ztug mdpa'
 app.config['MAIL_DEFAULT_SENDER'] = 'velrossestore@gmail.com'
 mail = Mail(app)
 
-# Ruta local de sus imágenes
-CARPETA_FAJAS = r'C:\Users\STEVEN\OneDrive\Escritorio\INGENIERIA DE SOFTWARE\Programas\FAJAS'
-
+# CORRECCIÓN: En Render usamos la carpeta 'static' que ya creó en su repositorio
 @app.route('/imagenes_fajas/<path:filename>')
 def serve_fajas(filename):
-    return send_from_directory(CARPETA_FAJAS, filename)
+    return send_from_directory('static', filename)
 
 HTML_LAYOUT = """
 <!DOCTYPE html>
@@ -103,7 +102,7 @@ HTML_LAYOUT = """
 
         #successModal { 
             display: {% if success %} flex {% else %} none {% endif %}; 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; justify-content: center; align-items: center; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; justify-content: center; align-items: center;
         }
         .modal-content { background: #fff; padding: 40px; border-radius: 20px; text-align: center; max-width: 450px; border: 3px solid var(--gold); }
         .modal-content h2 { color: #28a745; margin-bottom: 15px; }
@@ -255,9 +254,7 @@ def index():
         talla = request.form.get('talla')
 
         try:
-            msg = Message(subject=f"NUEVO PEDIDO: {nombre}",
-                          recipients=['velrossestore@gmail.com'])
-            
+            msg = Message(subject=f"NUEVO PEDIDO: {nombre}", recipients=['velrossestore@gmail.com'])
             msg.body = (
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
                 f"       NUEVA VENTA - VELROSSE STORE     \n"
@@ -286,10 +283,13 @@ def index():
             print(f"Error: {e}")
             success = True 
 
-    # --- BYPASS DE NGROK ---
     response = make_response(render_template_string(HTML_LAYOUT, success=success))
     response.headers['ngrok-skip-browser-warning'] = '69420'
     return response
+
+if __name__ == '__main__':
+    # Usamos el puerto estándar para Render
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
