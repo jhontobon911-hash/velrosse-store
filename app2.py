@@ -11,7 +11,7 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'velrossestore@gmail.com'
-# Contraseña de Aplicación de Google verificada
+# Contraseña de Aplicación de Google
 app.config['MAIL_PASSWORD'] = 'icdl jprr ztug mdpa' 
 app.config['MAIL_DEFAULT_SENDER'] = ('Velrosse Store', 'velrossestore@gmail.com')
 
@@ -22,7 +22,7 @@ def send_async_email(app, msg):
     with app.app_context():
         try:
             mail.send(msg)
-            print("Correo enviado exitosamente")
+            print("Correo enviado exitosamente a velrossestore@gmail.com")
         except Exception as e:
             print(f"Error enviando correo: {e}")
 
@@ -365,36 +365,36 @@ def index():
         for i in range(1, cantidad + 1):
             color = request.form.get(f'color_{i}')
             talla = request.form.get(f'talla_{i}')
-            detalles_pedido += f"• Faja #{i}: Talla {talla}, Color {color}\n"
+            detalles_pedido += f"• Faja #{i}: Talla {talla}, Color {color}\\n"
 
         # Preparamos el mensaje
         msg = Message(
             subject=f"NUEVA VENTA ({cantidad} UNID): {nombre}", 
-            recipients=['velrossestore@gmail.com']
+            recipients=['velrossestore@gmail.com'] # Confirmado el destinatario
         )
         msg.body = (
-            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            f"        NUEVA VENTA - VELROSSE STORE     \n"
-            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            f"📦 RESUMEN DEL PEDIDO:\n"
-            f"----------------------------------------\n"
-            f"Cantidad Total: {cantidad}\n"
-            f"{detalles_pedido}\n\n"
-            f"👤 DATOS DEL CLIENTE:\n"
-            f"----------------------------------------\n"
-            f"Nombre:    {nombre}\n"
-            f"Celular:   {celular}\n"
-            f"Cédula:    {cedula}\n\n"
-            f"📍 DIRECCIÓN DE ENVÍO:\n"
-            f"----------------------------------------\n"
-            f"Ciudad:    {ciudad}\n"
-            f"Dirección: {direccion}\n\n"
-            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            f"         PAGO AL RECIBIR EN CASA         \n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n"
+            f"        NUEVA VENTA - VELROSSE STORE     \\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n\\n"
+            f"📦 RESUMEN DEL PEDIDO:\\n"
+            f"----------------------------------------\\n"
+            f"Cantidad Total: {cantidad}\\n"
+            f"{detalles_pedido}\\n\\n"
+            f"👤 DATOS DEL CLIENTE:\\n"
+            f"----------------------------------------\\n"
+            f"Nombre:    {nombre}\\n"
+            f"Celular:   {celular}\\n"
+            f"Cédula:    {cedula}\\n\\n"
+            f"📍 DIRECCIÓN DE ENVÍO:\\n"
+            f"----------------------------------------\\n"
+            f"Ciudad:    {ciudad}\\n"
+            f"Dirección: {direccion}\\n\\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n"
+            f"         PAGO AL RECIBIR EN CASA         \\n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         )
         
-        # Iniciamos el hilo para enviar el correo
+        # Iniciamos el hilo para enviar el correo pasando el contexto de la app
         threading.Thread(target=send_async_email, args=(app, msg)).start()
         success = True 
 
