@@ -7,7 +7,6 @@ app = Flask(__name__)
 # --- CONFIGURACIÓN VELROSSE STORE ---
 TELEFONO_VENTAS = "573169641418"
 
-# Ruta para que servicios de "Keep-Alive" verifiquen que la página está viva
 @app.route('/healthcheck')
 def healthcheck():
     return "OK", 200
@@ -56,7 +55,6 @@ HTML_LAYOUT = """
         .price-row { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
         .price-now { font-size: 55px; font-weight: 900; color: var(--gold); }
         .discount-tag { background: var(--pink); color: #fff; padding: 5px 10px; border-radius: 5px; font-weight: bold; }
-        .payment-info { font-size: 14px; font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; gap: 5px; }
 
         .sel-title { font-size: 13px; font-weight: 800; text-transform: uppercase; margin: 15px 0 10px; display: block; color: #000; }
         .qty-selector { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--gold); font-weight: bold; margin-bottom: 15px; }
@@ -76,61 +74,42 @@ HTML_LAYOUT = """
             font-size: 24px; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-top: 15px;
             animation: shake 0.5s infinite;
         }
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            50% { transform: translate(-1px, 2px) rotate(1deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
+
+        /* --- TABLA DE MEDIDAS --- */
+        .size-table-container { margin: 50px auto; max-width: 600px; background: #fff; padding: 15px; border-radius: 12px; border: 1px solid #eee; }
+        .size-table { width: 100%; border-collapse: collapse; text-align: center; }
+        .table-header-main { background: var(--dark-blue); color: #fff; font-size: 18px; padding: 15px; text-transform: uppercase; font-weight: 900; }
+        .size-table th { background: #f8f9fa; padding: 12px; border-bottom: 2px solid var(--gold); font-size: 13px; }
+        .size-table td { padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; }
+        .size-table td:first-child { color: var(--pink); font-weight: 900; }
 
         /* --- RESEÑAS --- */
         .reviews-section { margin-top: 60px; padding: 40px 0; background: #fafafa; border-radius: 20px; }
         .reviews-title { text-align: center; font-size: 28px; font-weight: 900; margin-bottom: 40px; color: var(--black); }
         .reviews-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; padding: 0 20px; }
-        .review-card { background: #fff; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #eee; display: flex; flex-direction: column; position: relative; }
+        .review-card { background: #fff; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #eee; display: flex; flex-direction: column; }
         .review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
         .review-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); }
         .review-name { font-weight: 800; font-size: 16px; margin: 0; color: #222; }
-        .verified-badge { color: #15b358; font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+        .verified-badge { color: #15b358; font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
         .review-stars { color: #FFD700; font-size: 14px; margin: 10px 0; }
         .review-text { font-size: 14px; color: #444; line-height: 1.5; font-style: italic; margin-bottom: 15px; }
-        .review-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; border-top: 1px solid #f5f5f5; pt: 10px; }
-        .review-date { font-size: 11px; color: #999; }
-        .review-product-img { width: 70px; height: 90px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
-
-        /* Estilos de tabla y otros */
-        .size-table-container { margin: 50px auto; max-width: 550px; background: #fff; padding: 10px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .size-table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: center; font-size: 12px; border: 1px solid #eee; border-radius: 8px; overflow: hidden; }
-        .table-header-main { background: var(--dark-blue) !important; color: #fff !important; font-size: 16px; padding: 15px !important; letter-spacing: 3px; font-weight: 900; }
-        .size-table thead tr:last-child th { background: #f8f9fa; color: var(--black); padding: 12px 5px; text-transform: uppercase; font-weight: 800; border-bottom: 2px solid var(--gold); }
-        .size-table td { padding: 12px 5px; border-bottom: 1px solid #eee; color: #444; font-weight: 600; }
-        .size-table td:first-child { color: var(--pink); font-weight: 900; }
-
-        .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 40px 0; }
-        .feature-card { background: var(--light-gold); padding: 20px; text-align: center; border-radius: 10px; }
-        .feature-card i { font-size: 24px; color: var(--gold); margin-bottom: 10px; display: block; }
-        .feature-card span { font-size: 12px; font-weight: bold; line-height: 1.2; display: block; }
+        .review-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f5f5f5; padding-top: 10px; }
+        .review-product-img { width: 70px; height: 90px; object-fit: cover; border-radius: 8px; }
 
         .footer-black { background: #000; color: #fff; padding: 40px 20px; margin-top: 60px; }
         .footer-grid { max-width: 1200px; margin: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; }
         .footer-item i { font-size: 30px; color: var(--gold); margin-bottom: 15px; display: block; }
 
+        @keyframes shake { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        @media (max-width: 768px) { .main-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: repeat(2, 1fr); } }
+        
         #redirectingModal { 
             display: {% if whatsapp_url %} flex {% else %} none {% endif %}; 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 10000; justify-content: center; align-items: center; flex-direction: column; text-align: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 10000; justify-content: center; align-items: center; flex-direction: column; 
         }
         .loader { border: 8px solid #f3f3f3; border-top: 8px solid #25D366; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        @media (max-width: 768px) {
-            .main-grid { grid-template-columns: 1fr; }
-            .features-grid { grid-template-columns: repeat(2, 1fr); }
-            .footer-grid { grid-template-columns: repeat(2, 1fr); }
-            .reviews-container { grid-template-columns: 1fr; }
-        }
     </style>
 </head>
 <body>
@@ -138,12 +117,8 @@ HTML_LAYOUT = """
     <div id="redirectingModal">
         <div class="loader"></div>
         <h2 style="color: #25D366;">¡PROCESANDO TU PEDIDO!</h2>
-        <p>Estamos abriendo WhatsApp para confirmar tu compra...</p>
-        {% if whatsapp_url %}
-        <script>
-            setTimeout(function(){ window.location.href = "{{ whatsapp_url|safe }}"; }, 1500);
-        </script>
-        {% endif %}
+        <p>Abriendo WhatsApp para confirmar...</p>
+        {% if whatsapp_url %}<script>setTimeout(function(){ window.location.href = "{{ whatsapp_url|safe }}"; }, 1500);</script>{% endif %}
     </div>
 
     <div class="top-bar">
@@ -156,8 +131,7 @@ HTML_LAYOUT = """
         <div class="header-section">
             <h1 class="product-title">FAJA MOLDEADORA</h1>
             <h2 class="brand-name">VELROSSE STORE</h2>
-            <p class="sub-desc">Moldea tu cintura, reduce medidas y mejora tu postura con máxima comodidad.</p>
-            <div class="social-proof"><i class="fa-solid fa-star"></i> MILES DE MUJERES YA TRANSFORMARON SU CUERPO</div>
+            <p class="sub-desc">Reduce medidas al instante con el control abdominal más avanzado del mercado.</p>
         </div>
 
         <div class="main-grid">
@@ -174,21 +148,20 @@ HTML_LAYOUT = """
 
             <div class="purchase-box">
                 <div class="offer-timer">
-                    <div class="timer-label">¡Oferta por tiempo limitado!</div>
+                    <div class="timer-label">Oferta finaliza en:</div>
                     <div class="timer-clock" id="timer">02 : 47 : 35</div>
                 </div>
 
                 <div class="price-row">
-                    <div style="display:flex; flex-direction:column;">
-                        <span style="text-decoration:line-through; color:#999;">ANTES: $159.900</span>
+                    <div>
+                        <span style="text-decoration:line-through; color:#999; font-size:18px;">ANTES: $159.900</span><br>
                         <span class="price-now">$89.900</span>
                     </div>
                     <div class="discount-tag">45%<br>DTO.</div>
                 </div>
-                <div class="payment-info"><i class="fa-solid fa-house-chimney-check" style="color:var(--gold);"></i> PAGA AL RECIBIR EN LA PUERTA DE TU CASA</div>
 
                 <form method="POST">
-                    <span class="sel-title">¿Cuántas fajas deseas llevar?</span>
+                    <span class="sel-title">Cantidad</span>
                     <select name="cantidad" id="qtySelect" class="qty-selector" onchange="generateSelectors()">
                         <option value="1">Llevar 1 Unidad - $89.900</option>
                         <option value="2">Llevar 2 Unidades - $179.800</option>
@@ -197,7 +170,7 @@ HTML_LAYOUT = """
 
                     <div id="dynamicSelectors"></div>
 
-                    <span class="sel-title">Datos de Envío</span>
+                    <span class="sel-title">Datos para la entrega</span>
                     <div class="input-group"><i class="fa-solid fa-user"></i><input type="text" name="nombre" class="field" placeholder="Nombre completo" required></div>
                     <div class="input-group"><i class="fa-solid fa-phone"></i><input type="tel" name="celular" class="field" placeholder="Número de celular" required></div>
                     <div class="input-group"><i class="fa-solid fa-id-card"></i><input type="text" name="cedula" class="field" placeholder="Número de cédula" required></div>
@@ -205,19 +178,73 @@ HTML_LAYOUT = """
                     <div class="input-group"><i class="fa-solid fa-map-pin"></i><input type="text" name="direccion" class="field" placeholder="Dirección de entrega" required></div>
 
                     <button type="submit" class="btn-submit">
-                        <i class="fa-brands fa-whatsapp"></i> Realiza tu Compra ¡Pide ahora, paga al recibir!
+                        <i class="fa-brands fa-whatsapp"></i> PEDIR AHORA - PAGO AL RECIBIR
                     </button>
                 </form>
+            </div>
+        </div>
+
+        <div class="size-table-container">
+            <table class="size-table">
+                <thead>
+                    <tr><th colspan="3" class="table-header-main">ENCUENTRA TU TALLA IDEAL</th></tr>
+                    <tr><th>TALLA</th><th>CINTURA (CM)</th><th>CADERA (CM)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>XS</td><td>60 - 67</td><td>85 - 92</td></tr>
+                    <tr><td>S</td><td>68 - 75</td><td>93 - 100</td></tr>
+                    <tr><td>M</td><td>76 - 83</td><td>101 - 108</td></tr>
+                    <tr><td>L</td><td>84 - 91</td><td>109 - 116</td></tr>
+                    <tr><td>XL</td><td>92 - 99</td><td>117 - 124</td></tr>
+                    <tr><td>2XL</td><td>100 - 107</td><td>125 - 132</td></tr>
+                </tbody>
+            </table>
+            <p style="text-align:center; font-size:12px; color:#666; margin-top:10px;">* Si estás entre dos tallas, te recomendamos elegir la más grande para mayor comodidad.</p>
+        </div>
+
+        <div class="reviews-section">
+            <h2 class="reviews-title">CLIENTES SATISFECHOS ⭐⭐⭐⭐⭐</h2>
+            <div class="reviews-container">
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="review-avatar">
+                        <div>
+                            <p class="review-name">Mariana Torres</p>
+                            <span class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador Verificado</span>
+                        </div>
+                    </div>
+                    <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text">"Increíble calidad. La faja realmente moldea y no se nota bajo la ropa. El envío fue súper rápido a Medellín."</p>
+                    <div class="review-footer">
+                        <span style="font-size:11px; color:#999;">Hace 2 días</span>
+                        <img src="/imagenes_fajas/faja (2).jpg" class="review-product-img">
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" class="review-avatar">
+                        <div>
+                            <p class="review-name">Claudia Ruiz</p>
+                            <span class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador Verificado</span>
+                        </div>
+                    </div>
+                    <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text">"Me encantó que pude pagar al recibir. La talla M me quedó perfecta siguiendo la tabla de medidas. Muy recomendada."</p>
+                    <div class="review-footer">
+                        <span style="font-size:11px; color:#999;">Hace 1 semana</span>
+                        <img src="/imagenes_fajas/faja (4).jpg" class="review-product-img">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="footer-black">
         <div class="footer-grid">
-            <div class="footer-item"><i class="fa-solid fa-box-open"></i><strong>ENVÍO GRATIS</strong><br><small>A toda Colombia</small></div>
-            <div class="footer-item"><i class="fa-solid fa-handshake"></i><strong>PAGA AL RECIBIR</strong><br><small>Cancela al recibir</small></div>
-            <div class="footer-item"><i class="fa-solid fa-lock"></i><strong>COMPRA SEGURA</strong><br><small>Datos protegidos</small></div>
-            <div class="footer-item"><i class="fa-solid fa-award"></i><strong>GARANTÍA</strong><br><small>Por defectos de fábrica</small></div>
+            <div class="footer-item"><i class="fa-solid fa-box-open"></i><strong>ENVÍO GRATIS</strong><br><small>Todo Colombia</small></div>
+            <div class="footer-item"><i class="fa-solid fa-handshake"></i><strong>PAGA AL RECIBIR</strong><br><small>Sin riesgos</small></div>
+            <div class="footer-item"><i class="fa-solid fa-lock"></i><strong>PAGO SEGURO</strong><br><small>100% Protegido</small></div>
+            <div class="footer-item"><i class="fa-solid fa-award"></i><strong>CALIDAD PREMIUM</strong><br><small>Garantizada</small></div>
         </div>
     </div>
 
@@ -294,11 +321,9 @@ def index():
         whatsapp_url = f"https://wa.me/{TELEFONO_VENTAS}?text={mensaje_final}"
 
     response = make_response(render_template_string(HTML_LAYOUT, whatsapp_url=whatsapp_url))
-    # Importante: Estas cabeceras ayudan a Render y otros proxies a no cachear o mostrar advertencias
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     return response
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
-    app.run(host='0.0.0.0', port=port, debug=False)
