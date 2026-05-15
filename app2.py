@@ -221,6 +221,7 @@ HTML_LAYOUT = """
                     <tr><td>2XL</td><td>100 - 107</td><td>125 - 132</td></tr>
                 </tbody>
             </table>
+            <p style="text-align:center; font-size:12px; color:#666; margin-top:10px;">* Si estás entre dos tallas, te recomendamos elegir la más grande para mayor comodidad.</p>
         </div>
 
         <div class="reviews-section">
