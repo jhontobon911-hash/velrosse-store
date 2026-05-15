@@ -38,12 +38,6 @@ HTML_LAYOUT = """
         .product-title { font-size: 32px; font-weight: 800; margin: 0; text-transform: uppercase; }
         .sub-desc { color: #666; font-size: 16px; margin-top: 5px; }
 
-        /* --- BENEFICIOS --- */
-        .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 25px 0; text-align: center; }
-        .benefit-item { background: var(--light-gold); padding: 15px; border-radius: 10px; border: 1px solid #eee; }
-        .benefit-item i { color: var(--gold); font-size: 24px; margin-bottom: 8px; }
-        .benefit-item p { margin: 0; font-size: 13px; font-weight: bold; }
-
         .main-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; margin-top: 20px; }
 
         .gallery-box { display: flex; gap: 15px; }
@@ -60,6 +54,12 @@ HTML_LAYOUT = """
         .price-row { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
         .price-now { font-size: 55px; font-weight: 900; color: var(--gold); }
         .discount-tag { background: var(--pink); color: #fff; padding: 5px 10px; border-radius: 5px; font-weight: bold; }
+
+        /* --- SECCIÓN BENEFICIOS --- */
+        .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 40px 0; }
+        .benefit-card { background: var(--light-gold); padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #efe0c1; }
+        .benefit-card i { font-size: 30px; color: var(--gold); margin-bottom: 10px; }
+        .benefit-card h4 { margin: 10px 0; color: var(--dark-blue); text-transform: uppercase; }
 
         .sel-title { font-size: 13px; font-weight: 800; text-transform: uppercase; margin: 15px 0 10px; display: block; color: #000; }
         .qty-selector { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--gold); font-weight: bold; margin-bottom: 15px; }
@@ -85,6 +85,7 @@ HTML_LAYOUT = """
         .table-header-main { background: var(--dark-blue); color: #fff; font-size: 18px; padding: 15px; text-transform: uppercase; font-weight: 900; }
         .size-table th { background: #f8f9fa; padding: 12px; border-bottom: 2px solid var(--gold); font-size: 13px; }
         .size-table td { padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; }
+        .size-table td:first-child { color: var(--pink); font-weight: 900; }
 
         .reviews-section { margin-top: 60px; padding: 40px 0; background: #fafafa; border-radius: 20px; }
         .reviews-title { text-align: center; font-size: 28px; font-weight: 900; margin-bottom: 40px; color: var(--black); }
@@ -131,16 +132,9 @@ HTML_LAYOUT = """
 
     <div class="container">
         <div class="header-section">
-            <h1 class="product-title">FAJA MOLDEADORA PREMIUM</h1>
+            <h1 class="product-title">FAJA MOLDEADORA</h1>
             <h2 class="brand-name">VELROSSE STORE</h2>
-            <p class="sub-desc">La tecnología colombiana que define tu silueta al instante.</p>
-            
-            <div class="benefits-grid">
-                <div class="benefit-item"><i class="fa-solid fa-wand-magic-sparkles"></i><p>EFECTO INVISIBLE</p></div>
-                <div class="benefit-item"><i class="fa-solid fa-up-long"></i><p>LEVANTA COLA</p></div>
-                <div class="benefit-item"><i class="fa-solid fa-compress"></i><p>REDUCE 2 TALLAS</p></div>
-                <div class="benefit-item"><i class="fa-solid fa-leaf"></i><p>TELA TRANSPIRABLE</p></div>
-            </div>
+            <p class="sub-desc">Reduce medidas al instante con el control abdominal más avanzado del mercado.</p>
         </div>
 
         <div class="main-grid">
@@ -193,6 +187,25 @@ HTML_LAYOUT = """
             </div>
         </div>
 
+        <h2 style="text-align:center; margin-top:50px; text-transform:uppercase; font-weight:900;">¿Por qué elegir Velrosse?</h2>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <h4>Efecto Instantáneo</h4>
+                <p style="font-size:14px;">Reduce hasta 2 tallas al instante con nuestro sistema de compresión inteligente.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="fa-solid fa-leaf"></i>
+                <h4>Invisible y Cómoda</h4>
+                <p style="font-size:14px;">Telas premium transpirables que no se marcan bajo tus vestidos o jeans favoritos.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="fa-solid fa-person-walking-arrow-right"></i>
+                <h4>Corrección de Postura</h4>
+                <p style="font-size:14px;">Brinda soporte lumbar ayudándote a lucir más estilizada y segura todo el día.</p>
+            </div>
+        </div>
+
         <div class="size-table-container">
             <table class="size-table">
                 <thead>
@@ -208,7 +221,6 @@ HTML_LAYOUT = """
                     <tr><td>2XL</td><td>100 - 107</td><td>125 - 132</td></tr>
                 </tbody>
             </table>
-            <p style="text-align:center; font-size:12px; color:#666; margin-top:10px;">* Si estás entre dos tallas, te recomendamos elegir la más grande.</p>
         </div>
 
         <div class="reviews-section">
@@ -216,41 +228,63 @@ HTML_LAYOUT = """
             <div class="reviews-container">
                 <div class="review-card">
                     <div class="review-header">
-                        <img src="https://i.pravatar.cc/150?u=mariana_col" class="review-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" class="review-avatar">
                         <div>
-                            <p class="review-name">Mariana Torres (Medellín)</p>
+                            <p class="review-name">Yuliana Castro</p>
                             <span class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador Verificado</span>
                         </div>
                     </div>
                     <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="review-text">"Increíble calidad. Realmente moldea y no se nota bajo la ropa. El envío fue súper rápido."</p>
-                    <div class="review-footer"><img src="/imagenes_fajas/faja (2).jpg" class="review-product-img"></div>
+                    <p class="review-text">"La mejor inversión que he hecho. La uso para ir al trabajo y ni se siente. ¡Excelente servicio!"</p>
+                    <div class="review-footer">
+                        <span style="font-size:11px; color:#999;">Hace 1 día</span>
+                        <img src="/imagenes_fajas/faja (2).jpg" class="review-product-img">
+                    </div>
                 </div>
-                
                 <div class="review-card">
                     <div class="review-header">
-                        <img src="https://i.pravatar.cc/150?u=claudia_lat" class="review-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" class="review-avatar">
                         <div>
-                            <p class="review-name">Claudia Ruiz (Cali)</p>
+                            <p class="review-name">Luz Adriana Meza</p>
                             <span class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador Verificado</span>
                         </div>
                     </div>
                     <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="review-text">"Me encantó que pude pagar al recibir. La talla M me quedó perfecta siguiendo la tabla."</p>
-                    <div class="review-footer"><img src="/imagenes_fajas/faja (4).jpg" class="review-product-img"></div>
+                    <p class="review-text">"Llegó en 2 días a Barranquilla. La tela es muy suave pero aprieta lo necesario. ¡Me encantó!"</p>
+                    <div class="review-footer">
+                        <span style="font-size:11px; color:#999;">Hace 3 días</span>
+                        <img src="/imagenes_fajas/faja (3).jpg" class="review-product-img">
+                    </div>
                 </div>
-
                 <div class="review-card">
                     <div class="review-header">
-                        <img src="https://i.pravatar.cc/150?u=sofia_barr" class="review-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" class="review-avatar">
                         <div>
-                            <p class="review-name">Sofía Mendoza (B/quilla)</p>
+                            <p class="review-name">Carolina Giraldo</p>
                             <span class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador Verificado</span>
                         </div>
                     </div>
                     <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="review-text">"¡La mejor faja que he comprado! Recoge todo el abdomen y me siento súper segura."</p>
-                    <div class="review-footer"><img src="/imagenes_fajas/faja (3).jpg" class="review-product-img"></div>
+                    <p class="review-text">"Pedí 2 unidades y la oferta salió excelente. Muy recomendada para el post-parto."</p>
+                    <div class="review-footer">
+                        <span style="font-size:11px; color:#999;">Hace 5 días</span>
+                        <img src="/imagenes_fajas/faja (5).jpg" class="review-product-img">
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://randomuser.me/api/portraits/women/26.jpg" class="review-avatar">
+                        <div>
+                            <p class="review-name">Paola Andrea Rojas</p>
+                            <span class="verified-badge"><i class="fa-solid fa-circle-check"></i> Comprador Verificado</span>
+                        </div>
+                    </div>
+                    <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text">"Tal cual la descripción. Compré la beige para mis vestidos claros y es totalmente invisible."</p>
+                    <div class="review-footer">
+                        <span style="font-size:11px; color:#999;">Hace 1 semana</span>
+                        <img src="/imagenes_fajas/faja (6).jpg" class="review-product-img">
+                    </div>
                 </div>
             </div>
         </div>
